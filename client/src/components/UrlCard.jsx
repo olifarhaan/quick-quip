@@ -1,6 +1,5 @@
 import React from "react"
 import { MdBarChart } from "react-icons/md"
-import { BsCalendar2Heart } from "react-icons/bs"
 import { MdContentCopy, MdDateRange } from "react-icons/md"
 import { FaTrashAlt } from "react-icons/fa"
 
@@ -15,7 +14,6 @@ const UrlCard = ({ link, onDelete, onEdit }) => {
     toast.success("Short link copied!")
   }
 
-  const handleDelete = async () => {}
 
   return (
     <div className="w-full p-2 md:p-4 shadow-sm border my-2 bg-white relative hover:shadow-md">

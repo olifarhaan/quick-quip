@@ -1,71 +1,40 @@
-import {
-  Alert,
-  Button,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Spinner,
-  TextInput,
-} from "flowbite-react"
-import { MdAlternateEmail, MdOutlineEmail } from "react-icons/md"
-import { HiOutlineUser, HiOutlineExclamationCircle } from "react-icons/hi"
-import { PiPasswordBold } from "react-icons/pi"
-import { CiCamera } from "react-icons/ci"
+import useBodyScrollLock from "../hooks/useBodyScrollLock"
 
-import { CircularProgressbar } from "react-circular-progressbar"
-import "react-circular-progressbar/dist/styles.css"
-
-import { customFormFields } from "../assets/customThemes.js"
 import { Link, useNavigate } from "react-router-dom"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useSelector } from "react-redux"
-import isImage from "../utils/validateImage.js"
 import {
   updateUserStarted,
   updateUserSuccess,
   updateUserFailure,
-  resetErrorMessage,
-  deleteUserSuccess,
-  deleteUserStart,
-  deleteUserFailure,
-  signoutSuccess,
 } from "../redux/user/userSlice.js"
 import { useDispatch } from "react-redux"
-// import signout from "../utils/handleSignout.js"
 import useErrorMessageTimeout from "../hooks/useErrorMessageTimeout.js"
 import useSignout from "../hooks/useSignout.js"
 import useDeleteUser from "../hooks/useDeleteUser.js"
-import uploadImageToDatabase from "../utils/uploadImageToFirebase.js"
-import { roles } from "../utils/constants.js"
 import { toast } from "react-toastify"
+import ConfirmModal from "../components/ConfirmModal.jsx"
 
 export default function Profile() {
   const { currentUser, errorMessage, loading } = useSelector(
     (state) => state.user
   )
-  const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [toggle] = useBodyScrollLock()
 
   const [showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
     name: currentUser.name,
-    username: currentUser.username,
     email: currentUser.email,
     password: "",
-    imgUrl: currentUser.imgUrl,
   })
 
-  const imageRef = useRef()
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const handleSignout = useSignout()
   const handleDeleteUser = useDeleteUser()
-  console.log(formData)
 
   const handleChange = (e) => {
     setFormData((prevData) => {
-
-
       return {
         ...prevData,
         [e.target.id]:
@@ -74,14 +43,10 @@ export default function Profile() {
     })
   }
 
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     dispatch(updateUserStarted())
-    if (
-      formData.name === "" ||
-      formData.email === ""
-    ) {
+    if (formData.name === "" || formData.email === "") {
       dispatch(updateUserFailure("Fields can't be empty"))
       return
     }
@@ -117,7 +82,13 @@ export default function Profile() {
     }
   }
 
-  useEffect(()=>{
+  const cancelDelete = () => {
+    toggle()
+    setShowModal(false)
+    setDeleteItemId(null)
+  }
+
+  useEffect(() => {
     toast.error(errorMessage)
   }, [errorMessage])
 
@@ -125,13 +96,12 @@ export default function Profile() {
 
   return (
     <div>
-      <div className="max-w-sm mx-auto p-3 my-16 flex flex-col gap-3">
+      <div className="max-w-sm mx-auto p-3 my-16 flex flex-col gap-3 border bg-white">
         <h1 className="text-center">My Profile</h1>
         <form
           className="w-full flex flex-col gap-3"
           onSubmit={handleSubmit}
         >
-
           <input
             type="text"
             id="name"
@@ -158,8 +128,8 @@ export default function Profile() {
 
           <button
             className={`bg-accentRed border border-black text-white h-12 hover:bg-accentDarkRed transition duration-500 ease-in-out ${
-                loading ? "opacity-50" : "opacity-100"
-              }`}
+              loading ? "opacity-50" : "opacity-100"
+            }`}
             disabled={loading}
           >
             {loading ? (
@@ -185,39 +155,17 @@ export default function Profile() {
             </span>
           </div>
         </form>
-        <Modal
-          show={showModal}
-          onClose={() => setShowModal(false)}
-          popup
-          size="md"
-        >
-          <ModalHeader />
-          <ModalBody>
-            <div className="text-center">
-              <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-              <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete your account?
-              </h3>
-              <div className="flex justify-center gap-4">
-                <Button
-                  color="failure"
-                  onClick={() => {
-                    setShowModal(false)
-                    handleDeleteUser()
-                  }}
-                >
-                  Yes, I'm sure
-                </Button>
-                <Button
-                  color="gray"
-                  onClick={() => setShowModal(false)}
-                >
-                  No, cancel
-                </Button>
-              </div>
-            </div>
-          </ModalBody>
-        </Modal>
+        {showModal && (
+          <ConfirmModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            confirmDelete={() => handleDeleteUser()}
+            cancelDelete={cancelDelete}
+            text={
+              "Are you sure you want to delete your account? All your links will be also deleted"
+            }
+          />
+        )}
       </div>
     </div>
   )

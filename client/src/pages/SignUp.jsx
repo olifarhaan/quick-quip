@@ -12,7 +12,6 @@ export default function SignUp() {
 
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  console.log(formData)
 
   const handleChange = (e) => {
     setFormData((prevData) => ({
@@ -25,8 +24,6 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    console.log("form data-----------", formData)
-
     if (
       formData.name === "" ||
       formData.email === "" ||
@@ -69,8 +66,8 @@ export default function SignUp() {
   }
 
   return (
-    <div>
-      <div className="max-w-sm mx-auto p-3 my-16 flex flex-col gap-3">
+    <div className="mx-2">
+      <div className="max-w-sm mx-auto p-3 my-16 flex flex-col gap-3 border bg-white">
         <h1 className="text-center">Sign Up</h1>
         <form
           className="w-full flex flex-col gap-3"
@@ -118,7 +115,7 @@ export default function SignUp() {
           Have an account?{" "}
           <Link
             to="/sign-in"
-            className="text-accentRed hover:underline"
+            className="text-accentRed hover:underline font-semibold"
           >
             Sign in
           </Link>

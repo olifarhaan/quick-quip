@@ -1,4 +1,3 @@
-import { customFormFields } from "../assets/customThemes.js"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import {
@@ -20,8 +19,6 @@ export default function SignUp() {
   })
 
   const navigate = useNavigate()
-  console.log(formData)
-
   const handleChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -63,15 +60,14 @@ export default function SignUp() {
   }, [errorMessage])
 
   return (
-    <div>
-      <div className="max-w-sm mx-auto p-3 my-16 flex flex-col gap-3">
+    <div className="mx-2">
+      <div className="max-w-sm mx-auto p-3 my-16 flex flex-col gap-3 border bg-white">
         <h1 className="text-center">Sign In</h1>
         <form
           className="w-full flex flex-col gap-3"
           onSubmit={handleSubmit}
         >
           <input
-            theme={customFormFields}
             type="text"
             id="email"
             placeholder="Email"
@@ -92,20 +88,14 @@ export default function SignUp() {
             }`}
             disabled={loading}
           >
-            {loading ? (
-              <>
-                <span className="ml-2">Signing In...</span>
-              </>
-            ) : (
-              "Sign In"
-            )}
+            {loading ? <span className="ml-2">Signing In...</span> : "Sign In"}
           </button>
         </form>
         <div className="text-center">
           Don't have an account?{" "}
           <Link
             to="/sign-up"
-            className="text-accentRed hover:underline"
+            className="text-accentRed hover:underline font-semibold"
           >
             Sign up
           </Link>

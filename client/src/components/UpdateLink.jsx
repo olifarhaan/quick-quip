@@ -58,7 +58,6 @@ const UpdateLink = () => {
   }, [urlId])
 
   const handleSubmit = async (e) => {
-    console.log(formData)
     setLoading(true)
     if (!formData.longUrl) {
       toast.error("Enter long url first")
@@ -79,7 +78,6 @@ const UpdateLink = () => {
       const responseJSON = await res.json()
       if (res.ok && responseJSON.success) {
         const short = `${baseUrl}/l/${responseJSON.data.shortcode}`
-        console.log(short)
         setShortUrl(short)
       } else {
         toast.error(responseJSON.message)

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"
 const MyUrls = () => {
   const { currentUser } = useSelector((state) => state.user)
 
-  const navigate= useNavigate()
+  const navigate = useNavigate()
   const [links, setLinks] = useState(null)
   const [loading, setLoading] = useState(true)
   const [toggle] = useBodyScrollLock()
@@ -40,8 +40,6 @@ const MyUrls = () => {
       })
       const responseJSON = await res.json()
       if (res.ok && responseJSON.success) {
-        console.log(links)
-
         const updatedLinks = links.filter((link) => {
           return link._id !== uid
         })
@@ -95,12 +93,15 @@ const MyUrls = () => {
                 link={link}
                 key={link._id}
                 onDelete={() => onDelete(link._id)}
-                onEdit={()=>onEdit(link._id)}
+                onEdit={() => onEdit(link._id)}
               />
             ))}
           </>
         ) : (
-          <>You dont have any listing</>
+          <div className="flex flex-col justify-center items-center mt-20 gap-4">
+            <p>You dont have any links</p>
+            <button className="bg-accentRed px-4 py-3 text-white border border-black hover:bg-accentDarkRed transition duration-500 ease-in-out" onClick={()=>navigate("/")}> Create Short Url</button>
+          </div>
         )}
       </div>
       {showModal && (

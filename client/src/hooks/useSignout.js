@@ -1,5 +1,4 @@
 // useSignout.js
-import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { signoutSuccess } from "../redux/user/userSlice.js" // Replace with your actual action
 

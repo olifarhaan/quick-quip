@@ -14,8 +14,6 @@ const useErrorMessageTimeout = (errorMessage, timeout = 5000) => {
         dispatch(resetErrorMessage())
       }, timeout)
     }
-    console.log(timeoutId)
-
     return () => {
       clearTimeout(timeoutId)
       if (errorMessage) {

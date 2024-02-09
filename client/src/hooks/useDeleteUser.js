@@ -24,7 +24,6 @@ const useDeleteUser = () => {
         dispatch(deleteUserSuccess(responseJSON.message))
       }
     } catch (error) {
-      console.log("fifth--------")
       dispatch(deleteUserFailure(error.message))
     }
   }

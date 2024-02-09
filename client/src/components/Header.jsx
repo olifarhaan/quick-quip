@@ -1,52 +1,11 @@
-import {
-  Button,
-  Dropdown,
-  DropdownDivider,
-  DropdownHeader,
-  DropdownItem,
-  Navbar,
-  TextInput,
-} from "flowbite-react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { FaStaylinked } from "react-icons/fa"
-import { SiMicrodotblog } from "react-icons/si"
-import { CiSearch, CiUser } from "react-icons/ci"
-import { PiSignOut } from "react-icons/pi"
-
-import { FaMoon, FaSun } from "react-icons/fa"
-import { useDispatch, useSelector } from "react-redux"
-import useSignout from "../hooks/useSignout.js"
+import { useSelector } from "react-redux"
 
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user)
-  const dispatch = useDispatch()
-  const location = useLocation()
-  const handleSignout = useSignout()
 
   const navigate = useNavigate()
-
-  const navData = [
-    {
-      id: 1,
-      text: "Home",
-      link: "/",
-    },
-    {
-      id: 2,
-      text: "Projects",
-      link: "/projects",
-    },
-    {
-      id: 3,
-      text: "About",
-      link: "/about",
-    },
-    {
-      id: 4,
-      text: "Blogs",
-      link: "/blogs",
-    },
-  ]
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b-gray-300 shadow-sm">

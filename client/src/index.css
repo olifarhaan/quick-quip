@@ -19,6 +19,15 @@ h2 {
   font-weight: 700;
 }
 
+input {
+  height: 45px;
+  outline: 1px solid #6b7381;
+  padding: 0 8px 0 8px;
+}
+input:focus {
+  outline: 2px solid #4C84F5;
+}
+
 .Toastify__toast--error {
   border: 1px solid #eb5757;
   border-radius: 50px !important;

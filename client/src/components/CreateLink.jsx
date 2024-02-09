@@ -23,7 +23,6 @@ const CreateLink = () => {
   }
 
   const handleSubmit = async (e) => {
-    console.log(formData)
     setLoading(true)
     if (!formData.longUrl) {
       toast.error("Enter long url first")
@@ -44,7 +43,6 @@ const CreateLink = () => {
       const responseJSON = await res.json()
       if (res.ok && responseJSON.success) {
         const short = `${baseUrl}/l/${responseJSON.data.shortcode}`
-        console.log(short)
         setFormData({
           title: "",
           shortcode: "",
