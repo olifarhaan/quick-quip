@@ -32,10 +32,14 @@ const UpdateLink = () => {
 
   useEffect(() => {
     const fetchUrl = async () => {
+      console.log(`/api/v1/url/${currentUser._id}/${urlId}`)
+
       const res = await fetch(`/api/v1/url/${currentUser._id}/${urlId}`, {
         method: "GET",
       })
+      console.log("inside this----------");
       const responseJSON = await res.json()
+      console.log(responseJSON);
       if (res.ok && responseJSON.success) {
         setFormData({
           title: responseJSON.data.title,
@@ -43,7 +47,13 @@ const UpdateLink = () => {
           longUrl: responseJSON.data.longUrl,
         })
       } else {
+        console.log(responseJSON.statusCode)
+
+        if (responseJSON.statusCode === 404) {
+          navigate("*")
+        }
         toast.error(responseJSON.message)
+        return
       }
     }
     try {

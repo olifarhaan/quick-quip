@@ -5,11 +5,22 @@ import {
   getUserController,
 } from "../controllers/userController.js"
 import { verifyToken } from "../middlewares/verifyTokenMiddleware.js"
+import checkObjectIdParamMiddleware from "../middlewares/checkObjectIdParamMiddleware.js"
 
 const router = express.Router()
 
-router.get("/:userId", getUserController)
-router.put("/:userId", verifyToken, updateUserController)
-router.delete("/:userId", verifyToken, deleteUserController)
+router.get("/:userId", checkObjectIdParamMiddleware, getUserController)
+router.put(
+  "/:userId",
+  checkObjectIdParamMiddleware,
+  verifyToken,
+  updateUserController
+)
+router.delete(
+  "/:userId",
+  checkObjectIdParamMiddleware,
+  verifyToken,
+  deleteUserController
+)
 
 export default router

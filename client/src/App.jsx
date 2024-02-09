@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css"
 import Profile from "./pages/Profile"
 import MyUrls from "./pages/MyUrls"
 import UpdateLink from "./components/UpdateLink"
+import NotFound from "./pages/NotFound"
 
 function App() {
   return (
@@ -55,6 +56,10 @@ function App() {
               element={<UpdateLink />}
             />
           </Route>
+          <Route
+            path="*"
+            element={<NotFound />}
+          />
         </Routes>
         <Footer />
         <ToastContainer

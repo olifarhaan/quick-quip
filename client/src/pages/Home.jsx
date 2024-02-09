@@ -15,7 +15,7 @@ const Home = () => {
         </div>
       </section>
       <section className="mx-2">
-        <CreateLink/>
+        <CreateLink />
       </section>
     </main>
   )

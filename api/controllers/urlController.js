@@ -2,7 +2,7 @@ import { UNAUTHORIZED_MESSAGE } from "../utils/constants.js"
 import { errorHandler } from "../utils/errors.js"
 import { isValidUrl } from "../utils/validUrl.js"
 import Url from "../models/urlModel.js"
-import mongoose from "mongoose"
+import mongoose, { isValidObjectId } from "mongoose"
 
 export const createUrlController = async (req, res, next) => {
   if (!req.body.longUrl) {
@@ -19,7 +19,7 @@ export const createUrlController = async (req, res, next) => {
   }
   let shortcode = null
   if (req.body.shortcode && req.body.shortcode.trim() !== "") {
-    if(req.body.shortcode.trim().includes(" ")){
+    if (req.body.shortcode.trim().includes(" ")) {
       return next(
         errorHandler(
           400,
@@ -28,8 +28,10 @@ export const createUrlController = async (req, res, next) => {
       )
     }
     try {
-      const existingUrl = await Url.findOne({ shortcode: req.body.shortcode.trim() })
-      
+      const existingUrl = await Url.findOne({
+        shortcode: req.body.shortcode.trim(),
+      })
+
       if (existingUrl) {
         return next(
           errorHandler(
@@ -53,7 +55,6 @@ export const createUrlController = async (req, res, next) => {
   })
   newUrl._id = new mongoose.Types.ObjectId()
   try {
-
     const savedUrl = await newUrl.save()
     res
       .status(201)
@@ -70,7 +71,7 @@ export const getAllUrlController = async (req, res, next) => {
 
   try {
     const urls = await Url.find({ user: req.user.id })
-    res.status(200).jsonResponse(200, true, "Post fetching successfull", urls)
+    res.status(200).jsonResponse(200, true, "Url fetching successfull", urls)
   } catch (error) {
     next(error)
   }
@@ -83,11 +84,10 @@ export const getUrlController = async (req, res, next) => {
 
   try {
     const url = await Url.findOne({ _id: req.params.urlId })
+
     if (url) {
       if (url._doc.user.toString() === req.user.id) {
-        res
-          .status(200)
-          .jsonResponse(200, true, "Post fetching successfull", url)
+        res.status(200).jsonResponse(200, true, "Url fetching successfull", url)
       } else {
         return next(errorHandler(401, "You are not allowed to do this request"))
       }
@@ -103,6 +103,7 @@ export const updateUrlController = async (req, res, next) => {
   const urlId = req.params.urlId
   try {
     const url = await Url.findById(urlId)
+
     if (!url) {
       return next(errorHandler(404, "Url not found"))
     }
@@ -140,7 +141,7 @@ export const deleteUrlController = async (req, res, next) => {
       await url.deleteOne()
       res
         .status(200)
-        .jsonResponse(200, true, "The post has been deleted successfully")
+        .jsonResponse(200, true, "The url has been deleted successfully")
     } else {
       return next(errorHandler(403, UNAUTHORIZED_MESSAGE))
     }

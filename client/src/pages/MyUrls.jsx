@@ -46,6 +46,12 @@ const MyUrls = () => {
         setLinks(updatedLinks)
         toast.success("Link deleted successfully")
       }
+      else {
+        if(responseJSON.statusCode===404){
+          navigate("*")
+        }
+        else toast.error(responseJSON.message)
+      }
     } catch (error) {
       toast.error("Something went wrong")
     } finally {
@@ -65,7 +71,10 @@ const MyUrls = () => {
         if (res.ok && responseJSON.success) {
           setLinks(responseJSON.data)
         } else {
-          toast.error(responseJSON.message)
+          if(responseJSON.statusCode===404){
+            navigate("*")
+          }
+          else toast.error(responseJSON.message)
         }
       } catch (error) {
         toast.error("Something went wrong")
