@@ -6,7 +6,6 @@ import bcryptjs from "bcryptjs"
 
 export const getUserController = async (req, res, next) => {
   const userId = req.params.userId
-  console.log("first")
 
   try {
     const user = await User.findOne({ _id: userId })
@@ -14,7 +13,6 @@ export const getUserController = async (req, res, next) => {
       return next(errorHandler(404, "User not found"))
     }
     const { password, ...userWithoutPassword } = user._doc
-    console.log(userWithoutPassword, "------------------user without")
 
     res
       .status(200)
@@ -25,18 +23,12 @@ export const getUserController = async (req, res, next) => {
         userWithoutPassword
       )
   } catch (error) {
-    console.log(error.message)
+    next(error)
   }
 }
 
 export const updateUserController = async (req, res, next) => {
-  console.log("iside ------------------------------------------>")
-
-  console.log("Form data server : ", req.body)
-  console.log("User controller : ", req.user)
   const userId = req.params.userId
-  console.log(req.user, "----------inside controller")
-
   if (userId !== req.user.id) {
     return next(errorHandler(401, UNAUTHORIZED_MESSAGE))
   }
@@ -64,7 +56,6 @@ export const updateUserController = async (req, res, next) => {
   }
 
   if (req.body.name) {
-    console.log("inside----------------------here")
     req.body.name = req.body.name.trim()
     if (req.body.name === "") {
       return next(errorHandler(400, "Name is a required field"))
@@ -108,16 +99,11 @@ export const deleteUserController = async (req, res, next) => {
     if (!userFromDatabase) {
       res.status(404).jsonResponse(false, 404, "User not found")
     } else {
-      if (req.user.id !== userFromDatabase._id) {
-        await User.findByIdAndDelete(userId)
-        res.status(200).jsonResponse(true, 204, "User deleted successfully")
-      } else if (userId === req.user.id) {
-        await User.findByIdAndDelete(userId)
+      if (userId === req.user.id) {
+        await userFromDatabase.deleteOne()
         res.clearCookie("auth_token")
         res.status(200).jsonResponse(true, 204, "User deleted successfully")
       } else {
-        console.log("third")
-
         return next(errorHandler(401, UNAUTHORIZED_MESSAGE))
       }
     }

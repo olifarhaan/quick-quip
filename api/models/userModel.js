@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import Url from "./urlModel.js"
 
 const userSchema = new mongoose.Schema(
   {
@@ -14,7 +15,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-    }
+    },
   },
   {
     timestamps: true,
@@ -22,15 +23,25 @@ const userSchema = new mongoose.Schema(
 )
 
 // For ensuring the integrity of the database
-userSchema.pre("remove", async function (next) {
-  try {
-    // Delete all posts where userId matches the current user's _id
-    await Url.deleteMany({ user: this._id })
-    next()
-  } catch (error) {
-    next(error)
+userSchema.pre(
+  "deleteOne",
+  { document: true}, //to load the document otherwise it will give null
+  async function (next) {
+    try {
+      const urls = await Url.find({ user: this._id })
+
+      urls.map((url) => {
+        console.log(url)
+        console.log(url._doc)
+        console.log(url._doc._id)
+      })
+      await Url.deleteMany({ user: this._id })
+      next()
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
 
 const User = mongoose.model("User", userSchema)
 

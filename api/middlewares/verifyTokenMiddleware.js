@@ -12,8 +12,6 @@ export const verifyToken = (req, res, next) => {
     if (err) {
       return next(errorHandler(401, UNAUTHORIZED_MESSAGE))
     }
-    console.log("Verify Token",user, "---------------------->")
-
     req.user = user
     next()
   })

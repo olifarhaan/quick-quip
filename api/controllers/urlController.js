@@ -8,7 +8,6 @@ export const createUrlController = async (req, res, next) => {
   if (!req.body.longUrl) {
     return next(errorHandler(400, "Please provide the long url"))
   }
-  console.log(req.body)
 
   if (!isValidUrl(req.body.longUrl)) {
     return next(errorHandler(400, "Please provide a valid long url"))
@@ -20,8 +19,17 @@ export const createUrlController = async (req, res, next) => {
   }
   let shortcode = null
   if (req.body.shortcode && req.body.shortcode.trim() !== "") {
+    if(req.body.shortcode.trim().includes(" ")){
+      return next(
+        errorHandler(
+          400,
+          `This short link ${req.body.shortcode.trim()} cannot have spaces`
+        )
+      )
+    }
     try {
-      const existingUrl = Url.findOne({ shortcode: req.body.shortcode.trim() })
+      const existingUrl = await Url.findOne({ shortcode: req.body.shortcode.trim() })
+      
       if (existingUrl) {
         return next(
           errorHandler(
@@ -45,10 +53,8 @@ export const createUrlController = async (req, res, next) => {
   })
   newUrl._id = new mongoose.Types.ObjectId()
   try {
-    console.log("second----------------------------")
 
     const savedUrl = await newUrl.save()
-    console.log(savedUrl, "----------------------------")
     res
       .status(201)
       .jsonResponse(201, true, "Url created successfully", savedUrl)
@@ -100,9 +106,6 @@ export const updateUrlController = async (req, res, next) => {
     if (!url) {
       return next(errorHandler(404, "Url not found"))
     }
-    console.log("url---------------")
-    console.log(url._doc)
-    console.log(url._doc.user.toString(), req.user.id)
 
     if (url._doc.user.toString() !== req.user.id) {
       return next(errorHandler(401, "You are not allowed to do this request"))
@@ -119,8 +122,6 @@ export const updateUrlController = async (req, res, next) => {
       },
       { new: true }
     )
-    console.log(updatedUrl)
-
     res
       .status(201)
       .jsonResponse(201, true, "Url updated successfully", updatedUrl)
@@ -135,8 +136,6 @@ export const deleteUrlController = async (req, res, next) => {
     if (!url) {
       return next(errorHandler(404, "Url not found"))
     }
-    console.log(url._doc.user)
-
     if (url._doc.user.toString() === req.user.id) {
       await url.deleteOne()
       res
