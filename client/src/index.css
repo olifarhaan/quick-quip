@@ -19,13 +19,17 @@ h2 {
   font-weight: 700;
 }
 
+h1, h2, h3, h4, h5, h6{
+  color: #131313
+}
+
 input {
   height: 45px;
   outline: 1px solid #6b7381;
   padding: 0 8px 0 8px;
 }
 input:focus {
-  outline: 2px solid #4C84F5;
+  outline: 2px solid #4c84f5;
 }
 
 .Toastify__toast--error {
@@ -57,4 +61,16 @@ input:focus {
   align-self: center !important;
   padding-right: 5px !important;
   color: #222222 !important;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+}
+
+.home-heading {
+  background: linear-gradient(to bottom, transparent 50%, #fee5e4 50%);
 }

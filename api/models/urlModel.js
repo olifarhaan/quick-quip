@@ -2,9 +2,14 @@ import mongoose from "mongoose"
 
 const urlSchema = new mongoose.Schema(
   {
-    title:{
-      type:String,
-      required:true
+    title: {
+      type: String,
+      required: true,
+    },
+    favicon: {
+      type: String,
+      required: true,
+      default: "https://cdn-icons-png.freepik.com/256/44/44386.png",
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

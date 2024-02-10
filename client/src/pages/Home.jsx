@@ -10,12 +10,14 @@ const Home = () => {
           </span>
           <h1 className="text-3xl md:text-6xl">
             Long links sharing Made Easy with{" "}
-            <span className="text-accentRed font-semibold">Quick Quip</span>
+            <span className="text-accentRed font-semibold home-heading">Quick Quip</span>
           </h1>
         </div>
       </section>
       <section className="mx-2">
+        <div className="max-w-lg mx-auto p-3 my-16 border bg-white">
         <CreateLink />
+        </div>
       </section>
     </main>
   )

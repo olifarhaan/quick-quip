@@ -19,7 +19,7 @@ const Header = () => {
               to="/"
             >
               <FaStaylinked className="text-accentRed" />
-              <span className="font-bold">Quick Quip</span>
+              <span className="font-bold text-darkBlack">Quick Quip</span>
             </Link>
 
             {/* Primary Menu */}
@@ -31,7 +31,7 @@ const Header = () => {
             {currentUser ? (
               <>
                 <button
-                  className="bg-accentRed px-4 py-3 text-white border border-black hover:bg-accentDarkRed transition duration-500 ease-in-out"
+                  className="bg-accentLightPink px-4 py-3 text-darkBlack border border-darkBlack hover:bg-accentLightPinkDark transition duration-500 ease-in-out"
                   onClick={() => navigate("/my-urls")}
                 >
                   My Urls

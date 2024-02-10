@@ -18,7 +18,7 @@ const ConfirmModal = ({
           <div className="text-center p-5 flex-auto justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 -m-1 flex items-center text-red-500 mx-auto"
+              className="w-4 h-4 -m-1 flex items-center text-accentRed mx-auto"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -32,7 +32,7 @@ const ConfirmModal = ({
             </svg>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-16 h-16 flex items-center text-primary mx-auto"
+              className="w-16 h-16 flex items-center text-accentRed mx-auto"
               viewBox="0 0 20 20"
               fill="currentColor"
             >

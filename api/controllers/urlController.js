@@ -3,6 +3,7 @@ import { errorHandler } from "../utils/errors.js"
 import { isValidUrl } from "../utils/validUrl.js"
 import Url from "../models/urlModel.js"
 import mongoose, { isValidObjectId } from "mongoose"
+import { fetchWebsiteInfo } from "../utils/fetchWebsiteInfo.js"
 
 export const createUrlController = async (req, res, next) => {
   if (!req.body.longUrl) {
@@ -13,7 +14,8 @@ export const createUrlController = async (req, res, next) => {
     return next(errorHandler(400, "Please provide a valid long url"))
   }
 
-  let title = "Untitled"
+  let { title, favicon } = await fetchWebsiteInfo(req.body.longUrl)
+
   if (req.body.title && req.body.title.trim() !== "") {
     title = req.body.title
   }
@@ -49,6 +51,7 @@ export const createUrlController = async (req, res, next) => {
 
   const newUrl = new Url({
     title,
+    favicon,
     shortcode,
     longUrl: req.body.longUrl,
     user: req.user.id,
@@ -70,7 +73,7 @@ export const getAllUrlController = async (req, res, next) => {
   }
 
   try {
-    const urls = await Url.find({ user: req.user.id })
+    const urls = await Url.find({ user: req.user.id }).sort({ updatedAt: -1 })
     res.status(200).jsonResponse(200, true, "Url fetching successfull", urls)
   } catch (error) {
     next(error)

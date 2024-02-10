@@ -13,7 +13,6 @@ import Url from "./models/urlModel.js"
 import { errorHandler } from "./utils/errors.js"
 
 const __dirname = path.resolve()
-console.log(__dirname, "------dirname")
 const app = express()
 
 //Middleware for parsing request & response------>

@@ -4,8 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
+        accentLightPink: "#FEE5E4",
+        accentLightPinkDark: "#FDB8B4",
         accentRed: "#890000",
         accentDarkRed: "#3D0607",
+        darkBlack: "#131313",
       },
     },
   },
