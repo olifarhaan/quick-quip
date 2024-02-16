@@ -25,6 +25,9 @@ const urlSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    qrCode: {
+      type: String,
+    },
     noOfVisits: {
       type: Number,
       required: true,

@@ -102,6 +102,12 @@ export default function Profile() {
           className="w-full flex flex-col gap-3"
           onSubmit={handleSubmit}
         >
+          {/* 
+          <div className="relative">
+            <input type="text" id="demo" className="w-full"/>
+            <label htmlFor="demo" className="floatingLabel">Demo label</label>
+          </div> */}
+
           <input
             type="text"
             id="name"

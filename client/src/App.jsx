@@ -13,6 +13,7 @@ import Profile from "./pages/Profile"
 import MyUrls from "./pages/MyUrls"
 import UpdateLink from "./components/UpdateLink"
 import NotFound from "./pages/NotFound"
+import MyQRs from "./pages/MyQRs"
 
 function App() {
   return (
@@ -50,6 +51,10 @@ function App() {
             <Route
               path="/my-urls"
               element={<MyUrls />}
+            />
+            <Route
+              path="/my-qrs"
+              element={<MyQRs />}
             />
             <Route
               path="/edit-url/:urlId"

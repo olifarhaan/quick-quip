@@ -22,7 +22,7 @@ const UrlCard = ({ link, onDelete, onEdit }) => {
         <img
           src={link.favicon}
           alt={link.title}
-          className="h-10 p-3 border rounded-full"
+          className="h-10 p-2 border rounded-full"
         />
         <h2 className="truncate">{link.title}</h2>
       </div>

@@ -11,7 +11,7 @@ const UpdateLink = () => {
   const params = useParams()
   const urlId = params.urlId
   const { currentUser } = useSelector((state) => state.user)
-  const [shortUrl, setShortUrl] = useState(null)
+  const [generatingQR, setGeneratingQR] = useState(false)
   const navigate = useNavigate()
   const baseUrl = import.meta.env.VITE_BASE_URL
   const handleChange = (e) => {
@@ -28,27 +28,23 @@ const UpdateLink = () => {
     title: "",
     shortcode: "",
     longUrl: "",
+    qrCode: "",
   })
 
   useEffect(() => {
     const fetchUrl = async () => {
-      console.log(`/api/v1/url/${currentUser._id}/${urlId}`)
-
       const res = await fetch(`/api/v1/url/${currentUser._id}/${urlId}`, {
         method: "GET",
       })
-      console.log("inside this----------");
       const responseJSON = await res.json()
-      console.log(responseJSON);
       if (res.ok && responseJSON.success) {
         setFormData({
           title: responseJSON.data.title,
           shortcode: responseJSON.data.shortcode,
           longUrl: responseJSON.data.longUrl,
+          qrCode: responseJSON.data.qrCode,
         })
       } else {
-        console.log(responseJSON.statusCode)
-
         if (responseJSON.statusCode === 404) {
           navigate("*")
         }
@@ -80,6 +76,11 @@ const UpdateLink = () => {
       return
     }
     try {
+      const reqData = formData
+      delete reqData.qrCode
+      delete reqData.shortcode
+      console.log(reqData)
+
       const res = await fetch(`/api/v1/url/${urlId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -88,7 +89,6 @@ const UpdateLink = () => {
       const responseJSON = await res.json()
       if (res.ok && responseJSON.success) {
         const short = `${baseUrl}/l/${responseJSON.data.shortcode}`
-        setShortUrl(short)
       } else {
         toast.error(responseJSON.message)
       }
@@ -99,15 +99,48 @@ const UpdateLink = () => {
     }
   }
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shortUrl)
-    toast.success("Short link copied!")
+  const handleQRGeneration = async () => {
+    setGeneratingQR(true)
+    try {
+      const res = await fetch(`/api/v1/url/generateQR/${urlId}`, {
+        method: "PUT",
+      })
+      const responseJSON = await res.json()
+      if (res.ok && responseJSON.success) {
+        setFormData({ ...formData, qrCode: responseJSON.data.qrCode })
+      } else {
+        toast.error(responseJSON.message)
+      }
+    } catch (error) {
+      toast.error("Something went wrong")
+      console.log(error)
+    } finally {
+      setGeneratingQR(false)
+    }
   }
 
   return (
     <section className="w-full">
       <div className="max-w-lg mx-auto p-3 my-16 flex flex-col gap-3 border bg-white">
-        <h2 className="text-center">Updated your link🪄</h2>
+        <h2 className="text-center">Update🪄</h2>
+        {formData.qrCode ? (
+          <img
+            src={formData.qrCode}
+            alt="QR Code Image"
+            className="w-40 self-center border"
+          />
+        ) : (
+          <button
+            type="button"
+            className={`bg-transparent border-2 border-gray-700 text-gray-700 font-semibold h-12 hover:bg-[#F4F7FB] transition duration-500 ease-in-out ${
+              generatingQR ? "opacity-50" : "opacity-100"
+            }`}
+            disabled={generatingQR}
+            onClick={() => handleQRGeneration()}
+          >
+            {generatingQR ? "Generating ..." : "Generate QR"}
+          </button>
+        )}
         <form className="w-full flex flex-col gap-3">
           <input
             type="url"
@@ -139,12 +172,12 @@ const UpdateLink = () => {
           <div className="flex items-center gap-3">
             <span className="text-3xl">/</span>
             <input
-              className="w-full"
+              className="w-full bg-gray-200 text-gray-500"
               type="text"
               id="shortcode"
-              onChange={handleChange}
               placeholder="Back half (eg: 'short-link', Optional)"
               value={formData.shortcode}
+              disabled
             />
           </div>
 
@@ -158,18 +191,9 @@ const UpdateLink = () => {
               currentUser ? () => handleSubmit() : () => navigate("/sign-in")
             }
           >
-            {loading ? "Updating link..." : "Update Link"}
+            {loading ? "Updating ..." : "Update"}
           </button>
         </form>
-        {shortUrl && (
-          <div
-            className="w-full flex justify-between items-center bg-green-200 px-2 py-1 h-12 border border-green-600 text-black cursor-pointer"
-            onClick={handleCopy}
-          >
-            <span className="text-black">{shortUrl}</span>
-            <MdContentCopy className="text-2xl text-green-900 hover:text-green-950 " />
-          </div>
-        )}
       </div>
     </section>
   )

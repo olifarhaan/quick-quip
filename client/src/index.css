@@ -19,17 +19,13 @@ h2 {
   font-weight: 700;
 }
 
-h1, h2, h3, h4, h5, h6{
-  color: #131313
-}
-
-input {
-  height: 45px;
-  outline: 1px solid #6b7381;
-  padding: 0 8px 0 8px;
-}
-input:focus {
-  outline: 2px solid #4c84f5;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #131313;
 }
 
 .Toastify__toast--error {
@@ -73,4 +69,31 @@ html {
 
 .home-heading {
   background: linear-gradient(to bottom, transparent 50%, #fee5e4 50%);
+}
+
+.floatingLabel {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #6b7381;
+  transition: 0.5s;
+}
+
+input:not(:empty),
+input:focus-within ~ label {
+  top: 0%;
+  font-size: smaller;
+  background: white;
+  padding: 0 4px;
+}
+
+input {
+  height: 45px;
+  outline: 1px solid #6b7381;
+  padding: 0 8px;
+}
+input:focus {
+  outline: 2px solid #4c84f5;
 }
