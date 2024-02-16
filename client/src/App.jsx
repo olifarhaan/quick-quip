@@ -9,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoutes/PrivateRoute"
 import ScrollToTop from "./components/ScrollToTop"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+
 import Profile from "./pages/Profile"
 import MyUrls from "./pages/MyUrls"
 import UpdateLink from "./components/UpdateLink"

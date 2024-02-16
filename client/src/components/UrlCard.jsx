@@ -27,9 +27,14 @@ const UrlCard = ({ link, onDelete, onEdit }) => {
         <h2 className="truncate">{link.title}</h2>
       </div>
 
-      <Link to={shorturl}>
-        <p className="text-accentRed font-bold hover:underline">{shorturl}</p>
-      </Link>
+      <a
+        href={shorturl}
+        className="hover:underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <p className="text-accentRed font-bold">{shorturl}</p>
+      </a>
       <a
         href={link.longUrl}
         className="hover:underline"

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import CreateLink from "../components/CreateLink"
 import CreateQRCode from "../components/CreateQRCode"
 import QRCard from "../components/QRCard"
+import Loader from "../components/Loader"
 
 const MyQRs = () => {
   const { currentUser } = useSelector((state) => state.user)
@@ -94,14 +95,12 @@ const MyQRs = () => {
 
   useEffect(() => {}, [links])
 
-
-
   const handleSearchTextChange = async (e) => {
     setSearchText(e.target.value)
     filterResults()
   }
 
-  const filterResults=()=>{
+  const filterResults = () => {
     const filteredResults = links.filter((link) => {
       return (
         link.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -113,17 +112,14 @@ const MyQRs = () => {
     setFilteredLinks(filteredResults)
   }
 
-  useEffect(()=>{
-    if(searchText && searchText!=="") filterResults()
+  useEffect(() => {
+    if (searchText && searchText !== "") filterResults()
     else setFilteredLinks(links)
   }, [links])
 
   if (loading) {
-    return <>Loading...</>
+    return <Loader />
   }
-
-  
-
 
   return (
     <div className="w-full">
@@ -141,16 +137,14 @@ const MyQRs = () => {
           </button>
           {showCreateLink && (
             <div className="p-3 mb-16 border bg-white">
-              <CreateQRCode
-                setLinksList={setLinks}
-              />
+              <CreateQRCode setLinksList={setLinks} />
             </div>
           )}
         </div>
 
         <h2 className="text-center my-4">Your QRs</h2>
         <input
-        className="mb-2"
+          className="mb-2"
           type="text"
           id="searchText"
           placeholder="Search your QRs"

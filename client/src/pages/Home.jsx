@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
 import { FaQrcode } from "react-icons/fa"
-import { RiLinksFill } from "react-icons/ri"
+import { FaLink } from "react-icons/fa";
 
 import CreateLink from "../components/CreateLink"
 import CreateQRCode from "../components/CreateQRCode"
+import CallToAction from "../components/CallToAction"
 
 const Home = () => {
   const [tab, setTab] = useState("url")
 
-  useEffect(()=>{
-    if(localStorage.getItem("qr")){
+  useEffect(() => {
+    if (localStorage.getItem("qr")) {
       setTab("qr")
     }
-    if(localStorage.getItem("url")){
+    if (localStorage.getItem("url")) {
       setTab("url")
     }
   }, [])
@@ -43,7 +44,7 @@ const Home = () => {
                   : "bg-gray-100 text-gray-600 border-b-[1px] border-gray-300"
               }`}
             >
-              <RiLinksFill />
+              <FaLink />
               <p className="font-bold">Short Url</p>
             </div>
             <div
@@ -64,6 +65,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <CallToAction />
     </main>
   )
 }

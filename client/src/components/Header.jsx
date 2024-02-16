@@ -1,6 +1,11 @@
 import { Link, useNavigate } from "react-router-dom"
 import { FaStaylinked } from "react-icons/fa"
 import { useSelector } from "react-redux"
+import { FaQrcode } from "react-icons/fa"
+import { FaLink } from "react-icons/fa";
+
+import { FaRegUser } from "react-icons/fa6";
+
 
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user)
@@ -31,16 +36,24 @@ const Header = () => {
             {currentUser ? (
               <>
                 <button
-                  className="bg-accentLightPink px-4 py-3 text-darkBlack border border-darkBlack hover:bg-accentLightPinkDark transition duration-500 ease-in-out"
+                  className="bg-accentLightPink px-4 py-3 text-xl text-darkBlack border border-darkBlack hover:bg-accentLightPinkDark transition duration-500 ease-in-out"
                   onClick={() => navigate("/my-urls")}
                 >
-                  My Urls
+                  <FaLink />
                 </button>
+
                 <button
-                  className="bg-accentRed px-4 py-3 text-white border border-black hover:bg-accentDarkRed transition duration-500 ease-in-out"
+                  className="bg-accentLightPink px-4 py-3 text-xl text-darkBlack border border-darkBlack hover:bg-accentLightPinkDark transition duration-500 ease-in-out"
+                  onClick={() => navigate("/my-qrs")}
+                >
+                  <FaQrcode />
+                </button>
+
+                <button
+                  className="bg-accentRed px-4 py-3 text-xl text-white border border-black hover:bg-accentDarkRed transition duration-500 ease-in-out"
                   onClick={() => navigate("/profile")}
                 >
-                  My Profile
+                  <FaRegUser/>
                 </button>
               </>
             ) : (

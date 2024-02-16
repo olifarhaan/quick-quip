@@ -21,7 +21,7 @@ const QRCard = ({ link, onEdit }) => {
 
   return (
     <div className="w-full p-4 shadow-sm border my-2 bg-white relative hover:shadow-md">
-      <div className="flex flex-col sm:flex-row gap-2 items-center">
+      <div className="flex flex-col sm:flex-row gap-2 items-center ">
         <div className="w-32">
           <img
             src={link.qrCode}
@@ -29,7 +29,7 @@ const QRCard = ({ link, onEdit }) => {
             className="border w-full"
           />
         </div>
-        <div className="flex-1">
+        <div className="w-full flex flex-col">
           <div className="flex gap-2 items-center">
             <img
               src={link.favicon}
@@ -39,11 +39,16 @@ const QRCard = ({ link, onEdit }) => {
             <h2 className="truncate">{link.title}</h2>
           </div>
 
-          <Link to={shorturl}>
-            <p className="text-accentRed font-bold hover:underline">
+          <a
+            href={shorturl}
+            className="hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <p className="text-accentRed font-bold">
               {shorturl}
             </p>
-          </Link>
+          </a>
           <a
             href={link.longUrl}
             className="hover:underline"

@@ -5,6 +5,7 @@ import { MdContentCopy } from "react-icons/md"
 import { toast } from "react-toastify"
 import { isValidUrl } from "../../../api/utils/validUrl"
 import { useNavigate, useParams } from "react-router-dom"
+import { handleGoBack } from "../utils/handleGoBack"
 
 const UpdateLink = () => {
   const [loading, setLoading] = useState(true)
@@ -181,18 +182,25 @@ const UpdateLink = () => {
             />
           </div>
 
-          <button
-            type="button"
-            className={`bg-accentRed border border-black text-white h-12 hover:bg-accentDarkRed transition duration-500 ease-in-out ${
-              loading ? "opacity-50" : "opacity-100"
-            }`}
-            disabled={loading}
-            onClick={
-              currentUser ? () => handleSubmit() : () => navigate("/sign-in")
-            }
-          >
-            {loading ? "Updating ..." : "Update"}
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="bg-accentLightPink px-4 py-3 h-12 text-darkBlack border border-darkBlack hover:bg-accentLightPinkDark transition duration-500 ease-in-out"
+              onClick={()=>handleGoBack(navigate)}
+            >
+              Go Back
+            </button>
+            <button
+              type="button"
+              className={`bg-accentRed border flex-1 border-black text-white h-12 hover:bg-accentDarkRed transition duration-500 ease-in-out ${
+                loading ? "opacity-50" : "opacity-100"
+              }`}
+              disabled={loading}
+              onClick={handleSubmit}
+            >
+              {loading ? "Updating ..." : "Update"}
+            </button>
+          </div>
         </form>
       </div>
     </section>

@@ -6,6 +6,8 @@ import useBodyScrollLock from "../hooks/useBodyScrollLock"
 import ConfirmModal from "../components/ConfirmModal"
 import { useNavigate } from "react-router-dom"
 import CreateLink from "../components/CreateLink"
+import Loader from "../components/Loader"
+
 
 const MyUrls = () => {
   const { currentUser } = useSelector((state) => state.user)
@@ -117,7 +119,7 @@ const MyUrls = () => {
   }, [links])
 
   if (loading) {
-    return <>Loading...</>
+    return <Loader/>
   }
 
   
