@@ -9,6 +9,8 @@ import CreateLink from "../components/CreateLink"
 import CreateQRCode from "../components/CreateQRCode"
 import QRCard from "../components/QRCard"
 import Loader from "../components/Loader"
+import { FaWindowClose } from "react-icons/fa"
+import { MdAddBox } from "react-icons/md"
 
 const MyQRs = () => {
   const { currentUser } = useSelector((state) => state.user)
@@ -133,7 +135,21 @@ const MyQRs = () => {
                 : setShowCreateLink(true)
             }
           >
-            {showCreateLink ? "X Close" : "+ Create New"}
+            {showCreateLink ? (
+              <div className="flex gap-2 justify-center items-center">
+                <span>
+                  <FaWindowClose />
+                </span>
+                Close
+              </div>
+            ) : (
+              <div className="flex gap-2 justify-center items-center">
+                <span>
+                  <MdAddBox />
+                </span>
+                Create New
+              </div>
+            )}
           </button>
           {showCreateLink && (
             <div className="p-3 mb-16 border bg-white">

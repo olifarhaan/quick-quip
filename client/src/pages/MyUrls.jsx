@@ -7,6 +7,8 @@ import ConfirmModal from "../components/ConfirmModal"
 import { useNavigate } from "react-router-dom"
 import CreateLink from "../components/CreateLink"
 import Loader from "../components/Loader"
+import { FaWindowClose } from "react-icons/fa";
+import { MdAddBox } from "react-icons/md";
 
 
 const MyUrls = () => {
@@ -23,7 +25,7 @@ const MyUrls = () => {
   const [searchText, setSearchText] = useState("")
   const [deleteItemId, setDeleteItemId] = useState(null)
 
-  const onDelete = async (uid) => {
+  const onDelete = (uid) => {
     toggle()
     setDeleteItemId(uid)
     setShowModal(true)
@@ -94,14 +96,12 @@ const MyUrls = () => {
 
   useEffect(() => {}, [links])
 
-
-
   const handleSearchTextChange = async (e) => {
     setSearchText(e.target.value)
     filterResults()
   }
 
-  const filterResults=()=>{
+  const filterResults = () => {
     const filteredResults = links.filter((link) => {
       return (
         link.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -113,17 +113,14 @@ const MyUrls = () => {
     setFilteredLinks(filteredResults)
   }
 
-  useEffect(()=>{
-    if(searchText && searchText!=="") filterResults()
+  useEffect(() => {
+    if (searchText && searchText !== "") filterResults()
     else setFilteredLinks(links)
   }, [links])
 
   if (loading) {
-    return <Loader/>
+    return <Loader />
   }
-
-  
-
 
   return (
     <div className="w-full">
@@ -137,20 +134,18 @@ const MyUrls = () => {
                 : setShowCreateLink(true)
             }
           >
-            {showCreateLink ? "X Close" : "+ Create New"}
+            {showCreateLink ? <div className="flex gap-2 justify-center items-center"><span><FaWindowClose/></span>Close</div> : <div className="flex gap-2 justify-center items-center"><span><MdAddBox/></span> Create New</div>}
           </button>
           {showCreateLink && (
             <div className="p-3 mb-16 border bg-white">
-              <CreateLink
-                setLinksList={setLinks}
-              />
+              <CreateLink setLinksList={setLinks} />
             </div>
           )}
         </div>
 
         <h2 className="text-center my-4">Your Links</h2>
         <input
-        className="mb-2"
+          className="mb-2"
           type="text"
           id="searchText"
           placeholder="Search your links"
