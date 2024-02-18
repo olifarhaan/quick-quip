@@ -5,16 +5,11 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv/config"
 import { isValidEmail } from "../utils/validEmail.js"
 import mongoose from "mongoose"
+import { FRONTEND_BASE_URL } from "../utils/constants.js"
+import { sendMail } from "../utils/sendMail.js"
 
 export const signupController = async (req, res, next) => {
-  console.log(req.body)
-
   const { name, email, password } = req.body
-
-  // const name = nameParsed.trim()
-  // const username = usernameParsed.trim()
-  // const email = emailParsed.trim()
-  // const password = passwordParsed.trim()
 
   if (
     !name ||
@@ -53,7 +48,7 @@ export const signupController = async (req, res, next) => {
       password: hashedPassword,
     })
     //saving the new user
-    newUser._id = new mongoose.Types.ObjectId();
+    newUser._id = new mongoose.Types.ObjectId()
     const response = await newUser.save()
     res.status(201).jsonResponse(true, 201, "Sign up successfull", response)
   } catch (error) {
@@ -119,16 +114,132 @@ export const signinController = async (req, res, next) => {
         userWithoutPassword
       )
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }
-
 
 export const signoutController = async (req, res, next) => {
   try {
     res.clearCookie("auth_token")
     res.status(200).jsonResponse(true, 200, "User signed out successfully")
+  } catch (error) {
+    next(error)
+  }
+}
+
+let lastForgotPasswordRequestTime = null
+
+export const forgotPasswordController = async (req, res, next) => {
+  if (
+    lastForgotPasswordRequestTime &&
+    new Date().getTime() - lastForgotPasswordRequestTime < 120000
+  ) {
+    return next(
+      errorHandler(
+        429,
+        "Please wait for 2 minutes before making another request"
+      )
+    )
+  }
+  let { email } = req.body
+
+  if (!email) {
+    return next(errorHandler(400, "All fields are required"))
+  }
+
+  email = email.trim()
+
+  if (!isValidEmail(email)) {
+    return next(errorHandler(400, "Enter a valid email"))
+  }
+
+  try {
+    const user = await User.findOne({ email })
+    if (!user) {
+      return next(errorHandler(404, "User does not exist"))
+    }
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET_KEY + user.password,
+      {
+        expiresIn: "15m",
+      }
+    )
+    const encodedToken = Buffer.from(token).toString("base64")
+
+    const resetUrl = `${FRONTEND_BASE_URL}/reset-password/${user._id}/${encodedToken}`
+    const htmlBody = `<body>
+    Hi ${user.email}, <br>
+    We have received a request to reset your password. Follow the below <b>One-time link</b> to change your password. <br>
+    ${resetUrl} <br>
+    <hr>
+    If you have not requested the link then please ignore this email. 
+    <br>
+    Cheers,<br>
+    Quick Quip Team
+  </body>`
+
+    try {
+      await sendMail(user.email, "Reset password link | Quick Quip", htmlBody)
+      lastForgotPasswordRequestTime = new Date().getTime()
+      res
+        .status(200)
+        .jsonResponse(true, 200, "Password reset email sent successfully")
+    } catch (error) {
+      next(error)
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const resetPasswordValidatorController = async (req, res, next) => {
+  let { userId, token } = req.params
+
+  try {
+    const user = await User.findOne({ _id: userId })
+    if (!user) {
+      return next(errorHandler(404, "User does not exist"))
+    }
+
+    const secret = process.env.JWT_SECRET_KEY + user.password
+    const decodedToken = Buffer.from(token, "base64").toString()
+    jwt.verify(decodedToken, secret)
+    res.status(200).jsonResponse(true, 200, "Request is valid")
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const resetPasswordController = async (req, res, next) => {
+  let { userId, token } = req.params
+  let { password } = req.body
+
+  try {
+    const user = await User.findOne({ _id: userId })
+    if (!user) {
+      return next(errorHandler(404, "User does not exist"))
+    }
+    const secret = process.env.JWT_SECRET_KEY + user.password
+    const decodedToken = Buffer.from(token, "base64").toString()
+    jwt.verify(decodedToken, secret)
+
+    if (!password) {
+      return next(errorHandler(400, "Enter the password"))
+    }
+    password = password.trim()
+    if (password === "") {
+      return next(errorHandler(400, "Password cannot be empty"))
+    }
+    if (password.includes(" ")) {
+      return next(errorHandler(400, "Password cannot have whitespaces"))
+    }
+
+    const hashedPassword = bcryptjs.hashSync(password, 10)
+    user.password = hashedPassword
+    user.save()
+    res.status(200).jsonResponse(true, 200, "Password changed successfully")
   } catch (error) {
     next(error)
   }

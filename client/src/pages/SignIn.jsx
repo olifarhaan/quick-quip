@@ -92,12 +92,20 @@ export default function SignUp() {
           </button>
         </form>
         <div className="text-center">
-          Don't have an account?{" "}
+          <div>
+            Don't have an account?{" "}
+            <Link
+              to="/sign-up"
+              className="text-accentRed hover:underline font-semibold"
+            >
+              Sign up
+            </Link>
+          </div>
           <Link
-            to="/sign-up"
+            to={"/forgot-password"}
             className="text-accentRed hover:underline font-semibold"
           >
-            Sign up
+            Forgot Password
           </Link>
         </div>
       </div>

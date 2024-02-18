@@ -112,12 +112,20 @@ export default function SignUp() {
           </button>
         </form>
         <div className="text-center">
-          Have an account?{" "}
+          <div>
+            Have an account?{" "}
+            <Link
+              to="/sign-in"
+              className="text-accentRed hover:underline font-semibold"
+            >
+              Sign in
+            </Link>
+          </div>
           <Link
-            to="/sign-in"
+            to={"/forgot-password"}
             className="text-accentRed hover:underline font-semibold"
           >
-            Sign in
+            Forgot Password
           </Link>
         </div>
       </div>

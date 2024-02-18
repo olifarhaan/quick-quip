@@ -15,6 +15,8 @@ import MyUrls from "./pages/MyUrls"
 import UpdateLink from "./components/UpdateLink"
 import NotFound from "./pages/NotFound"
 import MyQRs from "./pages/MyQRs"
+import ForgotPassword from "./pages/ForgotPassword"
+import ResetPassword from "./pages/ResetPassword"
 
 function App() {
   return (
@@ -38,6 +40,14 @@ function App() {
           <Route
             path="/sign-up"
             element={<SignUp />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
+          <Route
+            path="/reset-password/:userId/:token"
+            element={<ResetPassword />}
           />
 
           {/* For all logged in users */}
