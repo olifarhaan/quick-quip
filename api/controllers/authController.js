@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv/config"
 import { isValidEmail } from "../utils/validEmail.js"
 import mongoose from "mongoose"
-import { FRONTEND_BASE_URL } from "../utils/constants.js"
 import { sendMail } from "../utils/sendMail.js"
 
 export const signupController = async (req, res, next) => {
@@ -168,7 +167,7 @@ export const forgotPasswordController = async (req, res, next) => {
     )
     const encodedToken = Buffer.from(token).toString("base64")
 
-    const resetUrl = `${FRONTEND_BASE_URL}/reset-password/${user._id}/${encodedToken}`
+    const resetUrl = `${process.env.FRONTEND_BASE_URL}/reset-password/${user._id}/${encodedToken}`
     const htmlBody = `<body>
     Hi ${user.email}, <br>
     We have received a request to reset your password. Follow the below <b>One-time link</b> to change your password. <br>
